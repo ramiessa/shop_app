@@ -5,6 +5,7 @@ import 'package:earthcuacke/sherd/cubit/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../models/categories_model.dart';
 import '../../models/home_model.dart';
 
 class Products extends StatelessWidget {
@@ -33,10 +34,6 @@ Widget bulderCrousel(HomeData model, context) {
   return Column(
     children: [
       CarouselSlider(
-        options: CarouselOptions(
-          height: 400.0,
-          viewportFraction: .98,
-        ),
         items: model.data?.banners.map((i) {
           return Builder(
             builder: (BuildContext context) {
@@ -48,9 +45,67 @@ Widget bulderCrousel(HomeData model, context) {
             },
           );
         }).toList(),
+        options: CarouselOptions(
+          height: 200,
+          viewportFraction: 1.0,
+          enlargeCenterPage: false,
+          initialPage: 0,
+          enableInfiniteScroll: true,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 3),
+          autoPlayAnimationDuration: Duration(seconds: 1),
+          autoPlayCurve: Curves.fastOutSlowIn,
+          scrollDirection: Axis.horizontal,
+        ),
       ),
-      const SizedBox( height:  3,),
-      Text('${i.}')
+      const SizedBox(
+        height: 3,
+      ),
+      Container(
+        color: Colors.grey[300],
+        child: GridView.count(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          mainAxisSpacing: 1.0,
+          crossAxisSpacing: 1.0,
+          childAspectRatio: 1 / 1.58,
+          children: List.generate(
+            model.data!.products.length,
+            (index) => buildGridProduct(model.data!.products[index], context),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget buildGridProduct(DataModel model, BuildContext context) {
+  return Stack(
+    alignment: AlignmentDirectional.bottomCenter,
+    children: [
+      Image(
+        image: NetworkImage(model.image!),
+        height: 100.0,
+        width: 100.0,
+        fit: BoxFit.cover,
+      ),
+      Container(
+        color: Colors.black.withOpacity(
+          .8,
+        ),
+        width: 100.0,
+        child: Text(
+          model.name!,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
     ],
   );
 }
