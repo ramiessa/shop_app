@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
           listener: (context, state) {},
           builder: (context, state) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Flutter Demo',
               theme: ThemeData(
                 primarySwatch: Colors.blue,

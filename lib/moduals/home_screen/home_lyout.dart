@@ -14,12 +14,13 @@ class ShopLayout extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-              'Salla',
+            centerTitle: true,
+            title: const Text(
+              'ShopLine',
             ),
             actions: [
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.search,
                 ),
                 onPressed: () {},

@@ -20,7 +20,7 @@ class Products extends StatelessWidget {
           body: ConditionalBuilder(
               condition: ShopAppCubit.get(context).homeData != null,
               builder: ((context) =>
-                  bulderCrousel(ShopAppCubit.get(context).homeData, context)),
+                  bulderScreen(ShopAppCubit.get(context).homeData, context)),
               fallback: (context) {
                 return const Center(child: CircularProgressIndicator());
               }),
@@ -30,82 +30,127 @@ class Products extends StatelessWidget {
   }
 }
 
-Widget bulderCrousel(HomeData model, context) {
-  return Column(
-    children: [
-      CarouselSlider(
-        items: model.data?.banners.map((i) {
-          return Builder(
-            builder: (BuildContext context) {
-              return Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Image(
-                    image: NetworkImage(i.image),
-                  ));
-            },
-          );
-        }).toList(),
-        options: CarouselOptions(
-          height: 200,
-          viewportFraction: 1.0,
-          enlargeCenterPage: false,
-          initialPage: 0,
-          enableInfiniteScroll: true,
-          reverse: false,
-          autoPlay: true,
-          autoPlayInterval: Duration(seconds: 3),
-          autoPlayAnimationDuration: Duration(seconds: 1),
-          autoPlayCurve: Curves.fastOutSlowIn,
-          scrollDirection: Axis.horizontal,
-        ),
-      ),
-      const SizedBox(
-        height: 3,
-      ),
-      Container(
-        color: Colors.grey[300],
-        child: GridView.count(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: 1.0,
-          crossAxisSpacing: 1.0,
-          childAspectRatio: 1 / 1.58,
-          children: List.generate(
-            model.data!.products.length,
-            (index) => buildGridProduct(model.data!.products[index], context),
+Widget bulderScreen(HomeData model, context) {
+  return SingleChildScrollView(
+    child: Column(
+      children: [
+        CarouselSlider(
+          items: model.data?.banners.map((i) {
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 3.0),
+                    child: Image(
+                      image: NetworkImage(i.image),
+                    ));
+              },
+            );
+          }).toList(),
+          options: CarouselOptions(
+            height: 200,
+            viewportFraction: 1.0,
+            enlargeCenterPage: false,
+            initialPage: 0,
+            enableInfiniteScroll: true,
+            reverse: false,
+            autoPlay: true,
+            autoPlayInterval: Duration(seconds: 3),
+            autoPlayAnimationDuration: Duration(seconds: 1),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            scrollDirection: Axis.horizontal,
           ),
         ),
-      ),
-    ],
+        const SizedBox(
+          height: 3,
+        ),
+        Container(
+          color: Colors.grey[300],
+          child: GridView.count(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            mainAxisSpacing: 1.0,
+            crossAxisSpacing: 1.0,
+            childAspectRatio: 1 / 1.34,
+            children: List.generate(
+              model.data!.products.length,
+              (index) => buildGridProduct(model.data!.products[index], context),
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }
 
-Widget buildGridProduct(DataModel model, BuildContext context) {
-  return Stack(
-    alignment: AlignmentDirectional.bottomCenter,
-    children: [
-      Image(
-        image: NetworkImage(model.image!),
-        height: 100.0,
-        width: 100.0,
-        fit: BoxFit.cover,
-      ),
-      Container(
-        color: Colors.black.withOpacity(
-          .8,
+Widget buildGridProduct(ProductModel model, BuildContext context) {
+  return Container(
+    color: Colors.white,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          alignment: AlignmentDirectional.bottomStart,
+          children: [
+            Image(
+              image: NetworkImage(model.image!),
+              height: 170.0,
+              width: 170.0,
+            ),
+            if (model.discount != 0)
+              Container(
+                color: Colors.red,
+                child: Text(
+                  'Discount',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+          ],
         ),
-        width: 100.0,
-        child: Text(
-          model.name!,
-          textAlign: TextAlign.center,
+        SizedBox(
+          height: 5,
+        ),
+        Text(
+          '${model.name} ',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
-      ),
-    ],
+        Row(
+          children: [
+            Text(
+              '${model.price.round()}',
+              style: const TextStyle(
+                fontSize: 15.0,
+                color: Colors.blue,
+              ),
+            ),
+            const SizedBox(
+              width: 5.0,
+            ),
+            if (model.discount != 0)
+              Text(
+                '${model.oldPrice.round()}',
+                style: const TextStyle(
+                  fontSize: 13.0,
+                  color: Colors.grey,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+            const Spacer(),
+            IconButton(
+              onPressed: () {},
+              icon: const CircleAvatar(
+                radius: 15.0,
+                child: Icon(
+                  Icons.favorite_border,
+                  size: 14.0,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
   );
 }
