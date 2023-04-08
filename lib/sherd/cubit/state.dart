@@ -9,3 +9,7 @@ class GetHomeDataSeccseful extends ShopState {}
 class GetHomeDataLoading extends ShopState {}
 
 class GetHomeDataError extends ShopState {}
+
+class ShopSuccessCategoriesState extends ShopState {}
+
+class ShopErrorCategoriesState extends ShopState {}

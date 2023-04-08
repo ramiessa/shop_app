@@ -7,8 +7,10 @@ import 'package:earthcuacke/sherd/cubit/state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../models/categories_model.dart';
 import '../../moduals/cateogries/cateogries.dart';
 import '../../moduals/home_screen/home_lyout.dart';
+import '../network/local/remote/constant.dart';
 
 class ShopAppCubit extends Cubit<ShopState> {
   ShopAppCubit() : super(ShopInitialState());
@@ -16,10 +18,10 @@ class ShopAppCubit extends Cubit<ShopState> {
   int currentindex = 0;
 
   dynamic homeData;
-  List<Widget> screens = const [
+  List<Widget> screens = [
     Products(),
+    CategoriesScreen(),
     Favoirate(),
-    Cateogries(),
     Setting(),
   ];
 
@@ -41,6 +43,21 @@ class ShopAppCubit extends Cubit<ShopState> {
     }).catchError((error) {
       emit(GetHomeDataError());
       print(error.toString());
+    });
+  }
+
+  CategoriesModel? categoriesModel;
+
+  void getCategories() {
+    DioHelper.getData(
+      url: GET_CATEGORIES,
+    ).then((value) {
+      categoriesModel = CategoriesModel.fromJson(value.data);
+
+      emit(ShopSuccessCategoriesState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(ShopErrorCategoriesState());
     });
   }
 }

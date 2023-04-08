@@ -40,7 +40,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => ShopAppCubit()..getHomeDate(),
+        create: (BuildContext context) => ShopAppCubit()
+          ..getHomeDate()
+          ..getCategories(),
         child: BlocConsumer<ShopAppCubit, ShopState>(
           listener: (context, state) {},
           builder: (context, state) {
