@@ -63,19 +63,32 @@ Widget bulderScreen(HomeData model, context) {
         const SizedBox(
           height: 3,
         ),
-        Container(
-          color: Colors.grey[300],
-          child: GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            mainAxisSpacing: 1.0,
-            crossAxisSpacing: 1.0,
-            childAspectRatio: 1 / 1.34,
-            children: List.generate(
-              model.data!.products.length,
-              (index) => buildGridProduct(model.data!.products[index], context),
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 9),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'The Products',
+                style: TextStyle(fontSize: 25),
+              ),
+              Container(
+                color: Colors.grey[300],
+                child: GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 1.0,
+                  crossAxisSpacing: 1.0,
+                  childAspectRatio: 1 / 1.5,
+                  children: List.generate(
+                    model.data!.products.length,
+                    (index) =>
+                        buildGridProduct(model.data!.products[index], context),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -139,8 +152,11 @@ Widget buildGridProduct(ProductModel model, BuildContext context) {
             const Spacer(),
             IconButton(
               onPressed: () {},
-              icon: const CircleAvatar(
+              icon: CircleAvatar(
                 radius: 15.0,
+                backgroundColor: ShopAppCubit.get(context).favorites[model.id]!
+                    ? Colors.blue
+                    : Colors.grey,
                 child: Icon(
                   Icons.favorite_border,
                   size: 14.0,
